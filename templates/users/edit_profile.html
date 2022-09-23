@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %} Settings {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main class="content">
+
+      {%comment%}
+        {% include 'includes/navigation.html' %}
+      {%endcomment%}
+
+        <form action="{% url 'users:edit_profile' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 col-xl-8">
+                    <div class="card card-body bg-white border-light shadow-sm mb-4">
+                        <h2 class="h5 mb-4">Profile information</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div>
+                                    <label for="first_name">First Name</label>
+                                    <input name="first_name" class="form-control" id="first_name" type="text"
+                                           placeholder="Enter your first name" value="{{ user.first_name }}"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div>
+                                    <label for="last_name">Last Name</label>
+                                    <input name="last_name" class="form-control" id="last_name" type="text"
+                                           placeholder="Also your last name" value="{{ user.last_name }}"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                              <label for="birthday">Birthday</label>
+                              <div class="input-group">
+                                  <span class="input-group-text"><span class="far fa-calendar-alt"></span></span>
+                                  {{ form.dob |attr:"type:date"}}
+                              </div>
+                            <label for="gender">Gender</label>
+                            <select name="gender" id="gender">
+                                <option>Gender</option>
+                                {% for key, value in user.profile.GENDER_CHOICES %}
+                                  {% if user.profile.gender == key %}
+                                    <option value="{{ key }}" selected>{{ value }}</option>
+                                  {% else %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                  {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row">
+                          <div class="form-group">
+                              <label for="email">Email</label>
+                              <input name="email" id="email" type="email"
+                                      placeholder="name@company.com" value="{{ user.email }}" readonly>
+                          </div>
+                        </div>
+                        <div class="col-12 col-xl-4">
+                          <div class="row">
+                            <div class="col-12">
+                              <h2>Select profile photo</h2>
+                              <img src="{{ user.profile.get_avatar }}" class="user-avatar" style="width:200px">
+                              <input name="avatar" type="file">  
+                            </div>                  
+                          </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Save All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {%comment%}
+
+          {% include 'includes/footer.html' %}
+
+        {%endcomment%}
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
